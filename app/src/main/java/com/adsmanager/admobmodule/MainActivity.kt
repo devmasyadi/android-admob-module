@@ -1,7 +1,6 @@
 package com.adsmanager.admobmodule
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -90,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnShowOpenApp).setOnClickListener {
             appOpenAdManager.showAdIfAvailable(this, appOpenId, object : OnShowAdCompleteListener {
                 override fun onShowAdComplete() {
-                    Log.i("HALLO", "onShowAdComplete open app")
+
                 }
             })
         }
