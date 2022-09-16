@@ -10,9 +10,12 @@ interface IAds {
         testDevices: List<String>? = listOf("")
     )
 
+    fun loadGdpr(activity: Activity, childDirected: Boolean)
+
     fun showBanner(
         activity: Activity,
         bannerView: RelativeLayout,
+        sizeBanner: SizeBanner? = SizeBanner.SMALL,
         adUnitId: String,
         callbackAds: CallbackAds
     )
@@ -52,6 +55,11 @@ interface IRewards {
 abstract class CallbackAds {
     open fun onAdLoaded() {}
     open fun onAdFailedToLoad(error: String? = "") {}
+}
+
+enum class SizeBanner {
+    SMALL,
+    MEDIUM
 }
 
 enum class SizeNative {

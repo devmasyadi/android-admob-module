@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         admobAds = AdmobAds()
         admobAds.initialize(activity = this, object : IInitialize {
             override fun onInitializationComplete() {
+                admobAds.loadGdpr(this@MainActivity, true)
                 admobAds.loadInterstitial(this@MainActivity, interstitialId)
                 admobAds.loadRewards(this@MainActivity, rewardsId)
                 appOpenAdManager.loadAd(this@MainActivity, appOpenId)
@@ -32,11 +33,16 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btnShowBanner).setOnClickListener {
             val bannerView = findViewById<RelativeLayout>(R.id.bannerView)
-            admobAds.showBanner(this, bannerView, bannerId, object : CallbackAds() {
-                override fun onAdFailedToLoad(error: String?) {
+            admobAds.showBanner(
+                this,
+                bannerView,
+                SizeBanner.SMALL,
+                bannerId,
+                object : CallbackAds() {
+                    override fun onAdFailedToLoad(error: String?) {
 
-                }
-            })
+                    }
+                })
         }
 
         findViewById<Button>(R.id.btnShowInterstitial).setOnClickListener {

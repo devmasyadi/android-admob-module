@@ -2,7 +2,9 @@ package com.adsmanager.admob
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.provider.Settings
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.widget.*
 import com.google.android.gms.ads.*
@@ -14,6 +16,13 @@ import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.ump.ConsentDebugSettings
+import com.google.android.ump.ConsentInformation
+import com.google.android.ump.ConsentInformation.OnConsentInfoUpdateFailureListener
+import com.google.android.ump.ConsentInformation.OnConsentInfoUpdateSuccessListener
+import com.google.android.ump.ConsentRequestParameters
+import com.google.android.ump.UserMessagingPlatform
+import java.util.*
 
 
 class AdmobAds : IAds {
@@ -36,14 +45,57 @@ class AdmobAds : IAds {
         }
     }
 
+    @SuppressLint("HardwareIds")
+    override fun loadGdpr(activity: Activity, childDirected: Boolean) {
+        var consentInformation: ConsentInformation? = null
+        var debugSettings: ConsentDebugSettings? = null
+        var params: ConsentRequestParameters? = null
+        if (BuildConfig.DEBUG) {
+            val androidId =
+                Settings.Secure.getString(activity.contentResolver, Settings.Secure.ANDROID_ID)
+            val deviceId: String = Utils.md5(androidId).uppercase(Locale.getDefault())
+            debugSettings = ConsentDebugSettings.Builder(activity)
+                .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                .addTestDeviceHashedId(deviceId)
+                .build()
+            params = ConsentRequestParameters.Builder()
+                .setConsentDebugSettings(debugSettings)
+                .setTagForUnderAgeOfConsent(childDirected)
+                .build()
+        } else {
+            params = ConsentRequestParameters.Builder()
+                .setTagForUnderAgeOfConsent(childDirected)
+                .build()
+        }
+        consentInformation = UserMessagingPlatform.getConsentInformation(activity)
+        consentInformation.requestConsentInfoUpdate(
+            activity,
+            params!!,
+            OnConsentInfoUpdateSuccessListener {
+                if (consentInformation.isConsentFormAvailable) {
+                    Utils.loadForm(activity, consentInformation)
+                }
+            },
+            OnConsentInfoUpdateFailureListener {
+                // Handle the error.
+                if(BuildConfig.DEBUG)
+                    Log.e("AdmobAds", "GDRP: statusCode: ${it.errorCode} message: ${it.message}")
+            })
+    }
+
     override fun showBanner(
         activity: Activity,
         bannerView: RelativeLayout,
+        sizeBanner: SizeBanner?,
         adUnitId: String,
         callbackAds: CallbackAds
     ) {
         val adView = AdView(activity)
-        adView.setAdSize(adSize(activity, bannerView))
+        when (sizeBanner) {
+            SizeBanner.SMALL -> adView.setAdSize(adSize(activity, bannerView))
+            else -> adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
+        }
+
         adView.adUnitId = adUnitId
         bannerView.removeAllViews()
         bannerView.addView(adView)
