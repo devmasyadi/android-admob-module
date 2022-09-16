@@ -210,7 +210,7 @@ class AdmobAds : IAds {
     override fun showRewards(
         activity: Activity,
         adUnitId: String,
-        callbackAds: CallbackAds,
+        callbackAds: CallbackAds?,
         iRewards: IRewards?
     ) {
         if (mRewardedAd != null) {
@@ -231,7 +231,7 @@ class AdmobAds : IAds {
                 iRewards?.onUserEarnedReward(RewardsItem(it.amount, it.type))
             }
         } else {
-            callbackAds.onAdFailedToLoad("The rewarded ad wasn't ready yet.")
+            callbackAds?.onAdFailedToLoad("The rewarded ad wasn't ready yet.")
             loadRewards(activity, adUnitId)
         }
     }

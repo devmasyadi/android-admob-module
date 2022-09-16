@@ -34,7 +34,7 @@ interface IAds {
     fun showRewards(
         activity: Activity,
         adUnitId: String,
-        callbackAds: CallbackAds,
+        callbackAds: CallbackAds?,
         iRewards: IRewards?
     )
 }
