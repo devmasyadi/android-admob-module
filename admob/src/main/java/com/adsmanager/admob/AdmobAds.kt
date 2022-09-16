@@ -88,7 +88,7 @@ class AdmobAds : IAds {
         bannerView: RelativeLayout,
         sizeBanner: SizeBanner,
         adUnitId: String,
-        callbackAds: CallbackAds
+        callbackAds: CallbackAds?
     ) {
         val adView = AdView(activity)
         when (sizeBanner) {
@@ -102,12 +102,12 @@ class AdmobAds : IAds {
         adView.adListener = object : AdListener() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 // Code to be executed when an ad request fails.
-                callbackAds.onAdFailedToLoad(adError.message)
+                callbackAds?.onAdFailedToLoad(adError.message)
             }
 
             override fun onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
-                callbackAds.onAdLoaded()
+                callbackAds?.onAdLoaded()
             }
         }
         val adRequest = AdRequest.Builder().build()
@@ -127,7 +127,7 @@ class AdmobAds : IAds {
         })
     }
 
-    override fun showInterstitial(activity: Activity, adUnitId: String, callbackAds: CallbackAds) {
+    override fun showInterstitial(activity: Activity, adUnitId: String, callbackAds: CallbackAds?) {
         if (mInterstitialAd != null) {
             mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
@@ -146,7 +146,7 @@ class AdmobAds : IAds {
             mInterstitialAd?.show(activity)
         } else {
             loadInterstitial(activity, adUnitId)
-            callbackAds.onAdFailedToLoad("The interstitial ad wasn't ready yet.")
+            callbackAds?.onAdFailedToLoad("The interstitial ad wasn't ready yet.")
         }
 
     }
@@ -157,7 +157,7 @@ class AdmobAds : IAds {
         nativeView: RelativeLayout,
         sizeNative: SizeNative,
         adUnitId: String,
-        callbackAds: CallbackAds
+        callbackAds: CallbackAds?
     ) {
 
         val adLoader = AdLoader.Builder(activity, adUnitId)
@@ -175,12 +175,12 @@ class AdmobAds : IAds {
             .withAdListener(object : AdListener() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     // Handle the failure by logging, altering the UI, and so on.
-                    callbackAds.onAdFailedToLoad(adError.message)
+                    callbackAds?.onAdFailedToLoad(adError.message)
                 }
 
                 override fun onAdLoaded() {
                     super.onAdLoaded()
-                    callbackAds.onAdLoaded()
+                    callbackAds?.onAdLoaded()
                 }
             })
             .withNativeAdOptions(
