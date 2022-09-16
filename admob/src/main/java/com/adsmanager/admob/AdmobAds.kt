@@ -86,14 +86,14 @@ class AdmobAds : IAds {
     override fun showBanner(
         activity: Activity,
         bannerView: RelativeLayout,
-        sizeBanner: SizeBanner?,
+        sizeBanner: SizeBanner,
         adUnitId: String,
         callbackAds: CallbackAds
     ) {
         val adView = AdView(activity)
         when (sizeBanner) {
             SizeBanner.SMALL -> adView.setAdSize(adSize(activity, bannerView))
-            else -> adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
+            SizeBanner.MEDIUM -> adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
         }
 
         adView.adUnitId = adUnitId
@@ -155,7 +155,7 @@ class AdmobAds : IAds {
     override fun showNativeAds(
         activity: Activity,
         nativeView: RelativeLayout,
-        sizeNative: SizeNative?,
+        sizeNative: SizeNative,
         adUnitId: String,
         callbackAds: CallbackAds
     ) {
@@ -166,7 +166,6 @@ class AdmobAds : IAds {
                 val layoutNative = when (sizeNative) {
                     SizeNative.SMALL -> R.layout.admob_small_native
                     SizeNative.MEDIUM -> R.layout.admob_big_native
-                    else -> R.layout.admob_small_native
                 }
                 val adView = activity.layoutInflater.inflate(layoutNative, null) as NativeAdView
                 populateNativeAdView(ad, adView)

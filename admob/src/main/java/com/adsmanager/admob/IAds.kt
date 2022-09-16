@@ -15,7 +15,7 @@ interface IAds {
     fun showBanner(
         activity: Activity,
         bannerView: RelativeLayout,
-        sizeBanner: SizeBanner? = SizeBanner.SMALL,
+        sizeBanner: SizeBanner,
         adUnitId: String,
         callbackAds: CallbackAds
     )
@@ -25,7 +25,7 @@ interface IAds {
     fun showNativeAds(
         activity: Activity,
         nativeView: RelativeLayout,
-        sizeNative: SizeNative? = SizeNative.SMALL,
+        sizeNative: SizeNative,
         adUnitId: String,
         callbackAds: CallbackAds
     )
