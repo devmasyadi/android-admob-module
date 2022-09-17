@@ -3,6 +3,7 @@ package com.adsmanager.admob
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import com.adsmanager.core.CallbackOpenAd
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -16,9 +17,9 @@ private const val LOG_TAG = "AppOpenAdManager"
  * Interface definition for a callback to be invoked when an app open ad is complete (i.e.
  * dismissed or fails to show).
  */
-interface OnShowAdCompleteListener {
-    fun onShowAdComplete()
-}
+//interface OnShowAdCompleteListener {
+//    fun onShowAdComplete()
+//}
 
 /** Inner class that loads and shows app open ads. */
 class AdmobOpenAd {
@@ -100,11 +101,7 @@ class AdmobOpenAd {
         showAdIfAvailable(
             activity,
             adUnitId,
-            object : OnShowAdCompleteListener {
-                override fun onShowAdComplete() {
-                    // Empty because the user will go back to the activity that shows the ad.
-                }
-            }
+            null,
         )
     }
 
@@ -112,12 +109,12 @@ class AdmobOpenAd {
      * Show the ad if one isn't already showing.
      *
      * @param activity the activity that shows the app open ad
-     * @param onShowAdCompleteListener the listener to be notified when an app open ad is complete
+     * @param callbackOpenAd the listener to be notified when an app open ad is complete
      */
     fun showAdIfAvailable(
         activity: Activity,
         adUnitId: String,
-        onShowAdCompleteListener: OnShowAdCompleteListener
+        callbackOpenAd: CallbackOpenAd?,
     ) {
         // If the app open ad is already showing, do not show the ad again.
         if (isShowingAd) {
@@ -127,8 +124,9 @@ class AdmobOpenAd {
 
         // If the app open ad is not available yet, invoke the callback then load the ad.
         if (!isAdAvailable()) {
+            callbackOpenAd?.onAdFailedToLoad("The app open ad is not ready yet.")
             Log.d(LOG_TAG, "The app open ad is not ready yet.")
-            onShowAdCompleteListener.onShowAdComplete()
+            callbackOpenAd?.onShowAdComplete()
             loadAd(activity, adUnitId)
             return
         }
@@ -142,7 +140,7 @@ class AdmobOpenAd {
                 appOpenAd = null
                 isShowingAd = false
                 Log.d(LOG_TAG, "onAdDismissedFullScreenContent.")
-                onShowAdCompleteListener.onShowAdComplete()
+                callbackOpenAd?.onShowAdComplete()
                 loadAd(activity, adUnitId)
             }
 
@@ -151,7 +149,7 @@ class AdmobOpenAd {
                 appOpenAd = null
                 isShowingAd = false
                 Log.d(LOG_TAG, "onAdFailedToShowFullScreenContent: " + adError.message)
-                onShowAdCompleteListener.onShowAdComplete()
+                callbackOpenAd?.onShowAdComplete()
                 loadAd(activity, adUnitId)
             }
 

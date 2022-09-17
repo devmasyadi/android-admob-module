@@ -6,8 +6,8 @@ import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.adsmanager.admob.AdmobAds
 import com.adsmanager.admob.AdmobOpenAd
-import com.adsmanager.admob.OnShowAdCompleteListener
 import com.adsmanager.core.CallbackAds
+import com.adsmanager.core.CallbackOpenAd
 import com.adsmanager.core.IRewards
 import com.adsmanager.core.RewardsItem
 import com.adsmanager.core.iadsmanager.IInitialize
@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        ConfigAds.adUnitOpenId = appOpenId
         val appOpenAdManager = AdmobOpenAd()
 
         admobAds = AdmobAds()
@@ -101,9 +102,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnShowOpenApp).setOnClickListener {
-            appOpenAdManager.showAdIfAvailable(this, appOpenId, object : OnShowAdCompleteListener {
-                override fun onShowAdComplete() {
+            appOpenAdManager.showAdIfAvailable(this, appOpenId, object : CallbackOpenAd() {
+                override fun onAdFailedToLoad(error: String?) {
+                    super.onAdFailedToLoad(error)
+                }
 
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                }
+
+                override fun onShowAdComplete() {
+                    super.onShowAdComplete()
                 }
             })
         }

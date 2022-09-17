@@ -32,7 +32,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
         appOpenAdManager.currentActivity?.let {
             appOpenAdManager.showAdIfAvailable(
                 it,
-                "ca-app-pub-3940256099942544/3419835294"
+                ConfigAds.adUnitOpenId
             )
         }
     }
