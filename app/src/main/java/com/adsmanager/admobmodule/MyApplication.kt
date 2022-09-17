@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.adsmanager.admobmodule
 
 import android.app.Activity
@@ -22,6 +24,7 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
         appOpenAdManager = AdmobOpenAd()
     }
 
+    @Suppress("DEPRECATION")
     /** LifecycleObserver method that shows the app open ad when the app moves to foreground. */
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onMoveToForeground() {

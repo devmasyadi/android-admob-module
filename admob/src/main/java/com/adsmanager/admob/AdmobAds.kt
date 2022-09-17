@@ -7,6 +7,13 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.adsmanager.core.CallbackAds
+import com.adsmanager.core.IRewards
+import com.adsmanager.core.RewardsItem
+import com.adsmanager.core.iadsmanager.IAds
+import com.adsmanager.core.iadsmanager.IInitialize
+import com.adsmanager.core.iadsmanager.SizeBanner
+import com.adsmanager.core.iadsmanager.SizeNative
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -18,8 +25,6 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.ump.ConsentDebugSettings
 import com.google.android.ump.ConsentInformation
-import com.google.android.ump.ConsentInformation.OnConsentInfoUpdateFailureListener
-import com.google.android.ump.ConsentInformation.OnConsentInfoUpdateSuccessListener
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.UserMessagingPlatform
 import java.util.*
@@ -33,23 +38,24 @@ class AdmobAds : IAds {
     override fun initialize(
         activity: Activity,
         iInitialize: IInitialize,
-        testDevices: List<String>?
     ) {
         MobileAds.initialize(activity) {
-            MobileAds.setRequestConfiguration(
-                RequestConfiguration.Builder()
-                    .setTestDeviceIds(testDevices)
-                    .build()
-            )
             iInitialize.onInitializationComplete()
         }
     }
 
+    override fun setTestDevices(activity: Activity, testDevices: List<String>) {
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder()
+                .setTestDeviceIds(testDevices)
+                .build()
+        )
+    }
+
     @SuppressLint("HardwareIds")
     override fun loadGdpr(activity: Activity, childDirected: Boolean) {
-        var consentInformation: ConsentInformation? = null
-        var debugSettings: ConsentDebugSettings? = null
-        var params: ConsentRequestParameters? = null
+        val debugSettings: ConsentDebugSettings?
+        val params: ConsentRequestParameters?
         if (BuildConfig.DEBUG) {
             val androidId =
                 Settings.Secure.getString(activity.contentResolver, Settings.Secure.ANDROID_ID)
@@ -67,18 +73,19 @@ class AdmobAds : IAds {
                 .setTagForUnderAgeOfConsent(childDirected)
                 .build()
         }
-        consentInformation = UserMessagingPlatform.getConsentInformation(activity)
-        consentInformation.requestConsentInfoUpdate(
+        val consentInformation: ConsentInformation? =
+            UserMessagingPlatform.getConsentInformation(activity)
+        consentInformation?.requestConsentInfoUpdate(
             activity,
             params!!,
-            OnConsentInfoUpdateSuccessListener {
+            {
                 if (consentInformation.isConsentFormAvailable) {
                     Utils.loadForm(activity, consentInformation)
                 }
             },
-            OnConsentInfoUpdateFailureListener {
+            {
                 // Handle the error.
-                if(BuildConfig.DEBUG)
+                if (BuildConfig.DEBUG)
                     Log.e("AdmobAds", "GDRP: statusCode: ${it.errorCode} message: ${it.message}")
             })
     }
@@ -236,6 +243,8 @@ class AdmobAds : IAds {
         }
     }
 
+
+    @Suppress("DEPRECATION")
     private fun adSize(activity: Activity, bannerView: RelativeLayout): AdSize {
         val display = activity.windowManager.defaultDisplay
         val outMetrics = DisplayMetrics()

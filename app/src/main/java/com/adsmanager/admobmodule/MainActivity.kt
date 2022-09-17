@@ -4,7 +4,15 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.adsmanager.admob.*
+import com.adsmanager.admob.AdmobAds
+import com.adsmanager.admob.AdmobOpenAd
+import com.adsmanager.admob.OnShowAdCompleteListener
+import com.adsmanager.core.CallbackAds
+import com.adsmanager.core.IRewards
+import com.adsmanager.core.RewardsItem
+import com.adsmanager.core.iadsmanager.IInitialize
+import com.adsmanager.core.iadsmanager.SizeBanner
+import com.adsmanager.core.iadsmanager.SizeNative
 
 class MainActivity : AppCompatActivity() {
 
