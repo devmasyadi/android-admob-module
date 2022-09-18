@@ -2,6 +2,7 @@ package com.adsmanager.admob
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.Log
@@ -36,10 +37,10 @@ class AdmobAds : IAds {
     private var mRewardedAd: RewardedAd? = null
 
     override fun initialize(
-        activity: Activity,
+        context: Context,
         iInitialize: IInitialize,
     ) {
-        MobileAds.initialize(activity) {
+        MobileAds.initialize(context) {
             iInitialize.onInitializationComplete()
         }
     }

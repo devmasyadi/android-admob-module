@@ -9,7 +9,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.adsmanager.admob.AdmobAds
 import com.adsmanager.admob.AdmobOpenAd
+import com.adsmanager.core.iadsmanager.IInitialize
 
 class MyApplication : Application(), Application.ActivityLifecycleCallbacks, LifecycleObserver {
 
@@ -19,6 +21,12 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
     override fun onCreate() {
         super.onCreate()
         registerActivityLifecycleCallbacks(this)
+
+        AdmobAds().initialize(this, object : IInitialize {
+            override fun onInitializationComplete() {
+
+            }
+        })
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         appOpenAdManager = AdmobOpenAd()

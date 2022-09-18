@@ -3,6 +3,7 @@ package com.adsmanager.admob
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import com.adsmanager.core.CallbackAds
 import com.adsmanager.core.CallbackOpenAd
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
@@ -39,6 +40,15 @@ class AdmobOpenAd {
      * @param context the context of the activity that loads the ad
      */
     fun loadAd(context: Context, adUnitId: String) {
+        loadAd(context, adUnitId, null)
+    }
+
+    /**
+     * Load an ad.
+     *
+     * @param context the context of the activity that loads the ad
+     */
+    fun loadAd(context: Context, adUnitId: String, callbackAds: CallbackAds?) {
         // Do not load ad if there is an unused ad or one is already loading.
         if (isLoadingAd || isAdAvailable()) {
             return
@@ -61,6 +71,7 @@ class AdmobOpenAd {
                     appOpenAd = ad
                     isLoadingAd = false
                     loadTime = Date().time
+                    callbackAds?.onAdLoaded()
                     Log.d(LOG_TAG, "onAdLoaded.")
                 }
 
@@ -71,6 +82,7 @@ class AdmobOpenAd {
                  */
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                     isLoadingAd = false
+                    callbackAds?.onAdFailedToLoad(loadAdError.message)
                     Log.d(LOG_TAG, "onAdFailedToLoad: " + loadAdError.message)
                 }
             }

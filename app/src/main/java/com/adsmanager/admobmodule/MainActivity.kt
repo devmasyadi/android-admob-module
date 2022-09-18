@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val rewardsId = "ca-app-pub-3940256099942544/5224354917"
     private val appOpenId = "ca-app-pub-3940256099942544/3419835294"
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,12 +32,12 @@ class MainActivity : AppCompatActivity() {
         val appOpenAdManager = AdmobOpenAd()
 
         admobAds = AdmobAds()
-        admobAds.initialize(activity = this, object : IInitialize {
+        admobAds.initialize(this, object : IInitialize {
             override fun onInitializationComplete() {
+                appOpenAdManager.loadAd(this@MainActivity, appOpenId)
                 admobAds.loadGdpr(this@MainActivity, true)
                 admobAds.loadInterstitial(this@MainActivity, interstitialId)
                 admobAds.loadRewards(this@MainActivity, rewardsId)
-                appOpenAdManager.loadAd(this@MainActivity, appOpenId)
             }
         })
 
