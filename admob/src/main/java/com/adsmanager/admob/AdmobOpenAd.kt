@@ -138,7 +138,6 @@ class AdmobOpenAd {
         if (!isAdAvailable()) {
             callbackOpenAd?.onAdFailedToLoad("The app open ad is not ready yet.")
             Log.d(LOG_TAG, "The app open ad is not ready yet.")
-            callbackOpenAd?.onShowAdComplete()
             loadAd(activity, adUnitId)
             return
         }
