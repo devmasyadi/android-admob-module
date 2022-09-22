@@ -36,12 +36,9 @@ class AdmobAds : IAds {
     private var mInterstitialAd: InterstitialAd? = null
     private var mRewardedAd: RewardedAd? = null
 
-    override fun initialize(
-        context: Context,
-        iInitialize: IInitialize,
-    ) {
+    override fun initialize(context: Context, appId: String?, iInitialize: IInitialize?) {
         MobileAds.initialize(context) {
-            iInitialize.onInitializationComplete()
+            iInitialize?.onInitializationComplete()
         }
     }
 
@@ -151,6 +148,7 @@ class AdmobAds : IAds {
 
                 }
             }
+            callbackAds?.onAdLoaded()
             mInterstitialAd?.show(activity)
         } else {
             loadInterstitial(activity, adUnitId)
@@ -235,6 +233,7 @@ class AdmobAds : IAds {
                     mRewardedAd = null
                 }
             }
+            callbackAds?.onAdLoaded()
             mRewardedAd?.show(activity) {
                 iRewards?.onUserEarnedReward(RewardsItem(it.amount, it.type))
             }

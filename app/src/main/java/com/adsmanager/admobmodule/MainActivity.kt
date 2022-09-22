@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val appOpenAdManager = AdmobOpenAd()
 
         admobAds = AdmobAds()
-        admobAds.initialize(this, object : IInitialize {
+        admobAds.initialize(this, null, object : IInitialize {
             override fun onInitializationComplete() {
                 appOpenAdManager.loadAd(this@MainActivity, appOpenId)
                 admobAds.loadGdpr(this@MainActivity, true)
