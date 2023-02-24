@@ -8,18 +8,18 @@ import com.adsmanager.admob.AdmobAds
 import com.adsmanager.admob.AdmobOpenAd
 import com.adsmanager.core.CallbackAds
 import com.adsmanager.core.CallbackOpenAd
-import com.adsmanager.core.IRewards
-import com.adsmanager.core.RewardsItem
+import com.adsmanager.core.SizeBanner
+import com.adsmanager.core.SizeNative
 import com.adsmanager.core.iadsmanager.IInitialize
-import com.adsmanager.core.iadsmanager.SizeBanner
-import com.adsmanager.core.iadsmanager.SizeNative
+import com.adsmanager.core.rewards.IRewards
+import com.adsmanager.core.rewards.RewardsItem
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var admobAds: AdmobAds
     private val bannerId = "ca-app-pub-3940256099942544/6300978111"
     private val interstitialId = "ca-app-pub-3940256099942544/1033173712"
-    private val nativeId = "ca-app-pub-4764558539538067/9810032480"
+    private val nativeId = "ca-app-pub-9687688364831872/5063874431"
     private val rewardsId = "ca-app-pub-3940256099942544/5224354917"
     private val appOpenId = "ca-app-pub-3940256099942544/3419835294"
 
@@ -80,6 +80,20 @@ class MainActivity : AppCompatActivity() {
                 this,
                 nativeView,
                 SizeNative.SMALL,
+                nativeId,
+                object : CallbackAds() {
+                    override fun onAdFailedToLoad(error: String?) {
+
+                    }
+                })
+        }
+
+        findViewById<Button>(R.id.btnSmallNativeRectangle).setOnClickListener {
+            val nativeView = findViewById<RelativeLayout>(R.id.nativeView)
+            admobAds.showNativeAds(
+                this,
+                nativeView,
+                SizeNative.SMALL_RECTANGLE,
                 nativeId,
                 object : CallbackAds() {
                     override fun onAdFailedToLoad(error: String?) {

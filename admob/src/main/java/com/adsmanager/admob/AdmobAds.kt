@@ -9,12 +9,12 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import com.adsmanager.core.CallbackAds
-import com.adsmanager.core.IRewards
-import com.adsmanager.core.RewardsItem
+import com.adsmanager.core.SizeBanner
+import com.adsmanager.core.SizeNative
 import com.adsmanager.core.iadsmanager.IAds
 import com.adsmanager.core.iadsmanager.IInitialize
-import com.adsmanager.core.iadsmanager.SizeBanner
-import com.adsmanager.core.iadsmanager.SizeNative
+import com.adsmanager.core.rewards.IRewards
+import com.adsmanager.core.rewards.RewardsItem
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -172,6 +172,7 @@ class AdmobAds : IAds {
                 val layoutNative = when (sizeNative) {
                     SizeNative.SMALL -> R.layout.admob_small_native
                     SizeNative.MEDIUM -> R.layout.admob_big_native
+                    SizeNative.SMALL_RECTANGLE -> R.layout.admob_small_rectangle_native
                 }
                 val adView = activity.layoutInflater.inflate(layoutNative, null) as NativeAdView
                 populateNativeAdView(ad, adView)
