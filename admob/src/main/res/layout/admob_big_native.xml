@@ -1,6 +1,7 @@
 <com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/native_background">
 
     <LinearLayout
@@ -109,6 +110,7 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/round_black"
+                    app:backgroundTint="@color/native_button_install"
                     android:gravity="center"
                     android:text="Install"
                     android:textColor="@color/native_text_button"
