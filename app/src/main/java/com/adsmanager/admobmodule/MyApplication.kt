@@ -37,7 +37,6 @@ class MyApplication : Application(), Application.ActivityLifecycleCallbacks, Lif
     /** LifecycleObserver method that shows the app open ad when the app moves to foreground. */
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onMoveToForeground() {
-        Log.e("HALLO", "onMoveToForeground")
         // Show the ad (if available) when the app moves to foreground.
         appOpenAdManager.currentActivity?.let {
             appOpenAdManager.showAdIfAvailable(

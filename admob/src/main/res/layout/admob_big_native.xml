@@ -16,7 +16,7 @@
             <TextView
                 android:layout_width="24dp"
                 android:layout_height="wrap_content"
-                android:background="@color/color_youtube_grayb"
+                android:background="@color/native_label_ads_background"
                 android:gravity="center"
                 android:text="Ad"
                 android:textColor="@color/native_text_button"
