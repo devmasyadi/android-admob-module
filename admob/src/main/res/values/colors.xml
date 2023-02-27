@@ -41,6 +41,6 @@
     <color name="color_youtube_grayb">#FF9800</color>
 
     <color name="native_label_ads_background">#FF9800</color>
-    <color name="native_button_install">#FF6200EE</color>
+    <color name="native_button_install">#FF5722</color>
 
 </resources>

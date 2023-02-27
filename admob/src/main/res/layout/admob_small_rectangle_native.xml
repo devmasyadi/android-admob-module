@@ -163,6 +163,7 @@
             android:textColor="@color/native_text_button"
             android:textSize="8sp"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck"
+            app:backgroundTint="@color/native_button_install"
             tools:text="Install" />
     </LinearLayout>
 </com.google.android.gms.ads.nativead.NativeAdView>
