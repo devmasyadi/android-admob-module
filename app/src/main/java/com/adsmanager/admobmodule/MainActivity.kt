@@ -50,7 +50,10 @@ class MainActivity : AppCompatActivity() {
                 bannerId,
                 object : CallbackAds() {
                     override fun onAdFailedToLoad(error: String?) {
-
+                        super.onAdFailedToLoad(error)
+                    }
+                    override fun onAdLoaded() {
+                        super.onAdLoaded()
                     }
                 })
         }
