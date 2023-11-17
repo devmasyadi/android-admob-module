@@ -5,9 +5,10 @@ import android.app.Activity
 import android.content.Context
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.View
 import android.widget.*
+import com.adsmanager.admob.Utils.loadForm
+import com.adsmanager.admob.Utils.md5
 import com.adsmanager.core.CallbackAds
 import com.adsmanager.core.SizeBanner
 import com.adsmanager.core.SizeNative
@@ -52,12 +53,12 @@ class AdmobAds : IAds {
 
     @SuppressLint("HardwareIds")
     override fun loadGdpr(activity: Activity, childDirected: Boolean) {
-        val debugSettings: ConsentDebugSettings?
-        val params: ConsentRequestParameters?
+        val debugSettings: ConsentDebugSettings
+        val params: ConsentRequestParameters
+
         if (BuildConfig.DEBUG) {
-            val androidId =
-                Settings.Secure.getString(activity.contentResolver, Settings.Secure.ANDROID_ID)
-            val deviceId: String = Utils.md5(androidId).uppercase(Locale.getDefault())
+            val androidId: String = Settings.Secure.getString(activity.contentResolver, Settings.Secure.ANDROID_ID)
+            val deviceId: String = md5(androidId).toUpperCase()
             debugSettings = ConsentDebugSettings.Builder(activity)
                 .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
                 .addTestDeviceHashedId(deviceId)
@@ -71,21 +72,19 @@ class AdmobAds : IAds {
                 .setTagForUnderAgeOfConsent(childDirected)
                 .build()
         }
-        val consentInformation: ConsentInformation? =
-            UserMessagingPlatform.getConsentInformation(activity)
-        consentInformation?.requestConsentInfoUpdate(
+        val consentInformation: ConsentInformation = UserMessagingPlatform.getConsentInformation(activity)
+        consentInformation.requestConsentInfoUpdate(
             activity,
-            params!!,
+            params,
             {
                 if (consentInformation.isConsentFormAvailable) {
-                    Utils.loadForm(activity, consentInformation)
+                    loadForm(activity, consentInformation)
                 }
-            },
-            {
-                // Handle the error.
-                if (BuildConfig.DEBUG)
-                    Log.e("AdmobAds", "GDRP: statusCode: ${it.errorCode} message: ${it.message}")
-            })
+            }
+        ) {
+            // Handle the error.
+        }
+
     }
 
     override fun showBanner(
